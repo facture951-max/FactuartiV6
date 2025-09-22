@@ -131,13 +131,17 @@ export default function ClientDetailView({ clientId, onBack }: Props) {
                             <Eye className="w-4 h-4" /> Voir
                           </Link>
                         </div>
-                      ) : (
+                      ) : o.clientType === 'societe' ? (
                         <button
                           onClick={() => setCreateForOrder(o.id)}
                           className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition-colors"
                         >
                           <Plus className="w-4 h-4" /> Créer Facture
                         </button>
+                      ) : (
+                        <span className="text-xs text-gray-500 dark:text-gray-400">
+                          Particulier - Pas de facture
+                        </span>
                       )}
                     </td>
                   </motion.tr>
