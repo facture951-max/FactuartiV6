@@ -48,6 +48,18 @@ export default function Settings() {
   const [passwordError, setPasswordError] = useState('');
   const [passwordSuccess, setPasswordSuccess] = useState(false);
 
+  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setPasswordForm(prev => ({
+      ...prev,
+      [name]: value
+    }));
+    // Clear error when user starts typing
+    if (passwordError) {
+      setPasswordError('');
+    }
+  };
+
   const [showEmailVerificationModal, setShowEmailVerificationModal] = useState(false);
   const [isResendingEmail, setIsResendingEmail] = useState(false);
   const [emailSent, setEmailSent] = useState(false);
