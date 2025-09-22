@@ -9,11 +9,12 @@ import {
   query, 
   where, 
   orderBy,
-  onSnapshot
+  onSnapshot,
+  getDoc
 } from 'firebase/firestore';
 import { db } from '../config/firebase';
 import { useAuth } from './AuthContext';
-import { Client, Product, useData } from './DataContext';
+import { Client } from './DataContext';
 
 export interface OrderItem {
   id: string;
@@ -60,7 +61,6 @@ const OrderContext = createContext<OrderContextType | undefined>(undefined);
 
 export function OrderProvider({ children }: { children: ReactNode }) {
   const { user, isAuthenticated } = useAuth();
-  const { products, updateProduct } = useData();
   const [orders, setOrders] = useState<Order[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -219,11 +219,12 @@ export function OrderProvider({ children }: { children: ReactNode }) {
 
     for (const item of items) {
       try {
-        // Récupérer le produit actuel pour avoir le stock à jour
-        const currentProduct = products.find(p => p.id === item.productId);
-        if (!currentProduct) continue;
+        // Récupérer le produit directement depuis Firestore pour avoir le stock le plus récent
+        const productDoc = await getDoc(doc(db, 'products', item.productId));
+        if (!productDoc.exists()) continue;
         
-        const previousStock = currentProduct.stock;
+        const currentProduct = productDoc.data();
+        const previousStock = currentProduct.stock || 0;
         const newStock = Math.max(0, previousStock - item.quantity);
         
         // Ajouter un mouvement de stock
@@ -253,7 +254,10 @@ export function OrderProvider({ children }: { children: ReactNode }) {
         });
         
         // Mettre à jour le stock du produit
-        await updateProduct(item.productId, { stock: newStock });
+        await updateDoc(doc(db, 'products', item.productId), { 
+          stock: newStock,
+          updatedAt: new Date().toISOString()
+        });
       } catch (error) {
         console.error('Erreur lors du débit de stock:', error);
       }
@@ -268,11 +272,12 @@ export function OrderProvider({ children }: { children: ReactNode }) {
 
     for (const item of items) {
       try {
-        // Récupérer le produit actuel pour avoir le stock à jour
-        const currentProduct = products.find(p => p.id === item.productId);
-        if (!currentProduct) continue;
+        // Récupérer le produit directement depuis Firestore pour avoir le stock le plus récent
+        const productDoc = await getDoc(doc(db, 'products', item.productId));
+        if (!productDoc.exists()) continue;
         
-        const previousStock = currentProduct.stock;
+        const currentProduct = productDoc.data();
+        const previousStock = currentProduct.stock || 0;
         const newStock = previousStock + item.quantity;
         
         // Ajouter un mouvement de stock de retour
@@ -302,7 +307,10 @@ export function OrderProvider({ children }: { children: ReactNode }) {
         });
         
         // Mettre à jour le stock du produit
-        await updateProduct(item.productId, { stock: newStock });
+        await updateDoc(doc(db, 'products', item.productId), { 
+          stock: newStock,
+          updatedAt: new Date().toISOString()
+        });
       } catch (error) {
         console.error('Erreur lors du retour de stock:', error);
       }
