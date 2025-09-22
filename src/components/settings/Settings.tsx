@@ -5,6 +5,7 @@ import { db } from '../../config/firebase';
 import { useAuth } from '../../contexts/AuthContext';
 import { useLanguage } from '../../contexts/LanguageContext';
 import { Building2, User, Bell, Shield, FileText, Palette, X, Mail, CheckCircle, AlertTriangle } from 'lucide-react';
+import { updatePassword, reauthenticateWithCredential, EmailAuthProvider } from 'firebase/auth';
 import TemplateSelector from '../templates/TemplateSelector';
 import EmailVerificationModal from '../auth/EmailVerificationModal';
 
@@ -36,6 +37,16 @@ export default function Settings() {
   const [signatureUrl, setSignatureUrl] = useState('');
   const [isSavingSignature, setIsSavingSignature] = useState(false);
   const [showSignatureModal, setShowSignatureModal] = useState(false);
+
+  const [showPasswordModal, setShowPasswordModal] = useState(false);
+  const [passwordData, setPasswordData] = useState({
+    currentPassword: '',
+    newPassword: '',
+    confirmPassword: ''
+  });
+  const [isChangingPassword, setIsChangingPassword] = useState(false);
+  const [passwordError, setPasswordError] = useState('');
+  const [passwordSuccess, setPasswordSuccess] = useState(false);
 
   const [showEmailVerificationModal, setShowEmailVerificationModal] = useState(false);
   const [isResendingEmail, setIsResendingEmail] = useState(false);
@@ -773,13 +784,12 @@ export default function Settings() {
               </div>
               
               <button className="w-full text-left px-3 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors">
-                Changer le mot de passe
-              </button>
-              <button className="w-full text-left px-3 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors">
-                Authentification à deux facteurs
-              </button>
-              <button className="w-full text-left px-3 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors">
-                Sessions actives
+                <button
+                  onClick={() => setShowPasswordModal(true)}
+                  className="w-full text-left px-3 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors"
+                >
+                  Changer le mot de passe
+                </button>
               </button>
             </div>
           </div>
