@@ -33,7 +33,7 @@ import ProUpgradeSuccess from './components/license/ProUpgradeSuccess';
 import { useLicense } from './contexts/LicenseContext';
 import AdminDashboard from './components/admin/AdminDashboard';
 import StockManagement from './components/stock/StockManagement';
-import HRManagement from './components/hr/HRManagement';
+// import HRManagement from './components/hr/HRManagement';
 import SupplierManagement from './components/suppliers/SupplierManagement';
 import SuppliersSection from './components/suppliers/SuppliersSection';
 import AccountManagement from './components/account/AccountManagement';
@@ -174,7 +174,7 @@ function AppContent() {
             <Route path="/suppliers" element={<SuppliersSection />} />
             <Route path="/stock-management" element={<StockManagement />} />
             <Route path="/supplier-management" element={<SupplierManagement />} />
-            <Route path="/hr-management" element={<HRManagement />} />
+            {/* <Route path="/hr-management" element={<HRManagement />} /> */}
             <Route path="/project-management" element={<ProjectManagement />} />
             <Route path="/account-management" element={<AccountManagement />} />
             <Route path="/commandes" element={<OrdersList />} />
