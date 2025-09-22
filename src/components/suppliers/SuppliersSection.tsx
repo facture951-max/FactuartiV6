@@ -19,17 +19,7 @@ export default function SuppliersSection() {
   const [showUpgradeModal, setShowUpgradeModal] = useState(false);
 
   // Si on visualise un fournisseur, afficher la vue détaillée
-  if (viewingSupplier) {
-    const supplier = suppliers.find(s => s.id === viewingSupplier);
-    if (supplier) {
-      return (
-        <SupplierDetailView 
-          supplier={supplier}
-          onBack={() => setViewingSupplier(null)}
-        />
-      );
-    }
-  }
+ 
 
   const filteredSuppliers = suppliers.filter(supplier => {
     const matchesSearch = supplier.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
