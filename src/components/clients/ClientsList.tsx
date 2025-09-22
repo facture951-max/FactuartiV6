@@ -183,8 +183,6 @@ export default function ClientsList() {
         />
       )}
 
-      <ClientActionsGuide />
-        
    </div>
   );
 }
