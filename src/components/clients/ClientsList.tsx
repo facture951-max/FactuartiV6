@@ -183,7 +183,7 @@ export default function ClientsList() {
         />
       )}
 
-   </div>
+     
   );
 }
 
