@@ -5,6 +5,8 @@ import { useLanguage } from '../../contexts/LanguageContext';
 import AddClientModal from './AddClientModal';
 import EditClientModal from './EditClientModal';
 import ClientDetailView from './ClientDetailView';
+import ClientActionsGuide from './ClientActionsGuide';
+
 import { Plus, Search, Edit, Trash2, Phone, Mail, Eye } from 'lucide-react';
 
 export default function ClientsList() {
