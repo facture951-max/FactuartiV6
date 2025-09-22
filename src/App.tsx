@@ -271,17 +271,17 @@ function App() {
       <LanguageProvider>
         <AuthProvider>
           <UserManagementProvider>
-            <OrderProvider>
-              <StockProvider>
-                <SupplierProvider>
-                  <DataProvider>
+            <DataProvider>
+              <OrderProvider>
+                <StockProvider>
+                  <SupplierProvider>
                     <LicenseProvider>
                       <AppContent />
                     </LicenseProvider>
-                  </DataProvider>
-                </SupplierProvider>
-              </StockProvider>
-            </OrderProvider>
+                  </SupplierProvider>
+                </StockProvider>
+              </OrderProvider>
+            </DataProvider>
           </UserManagementProvider>
         </AuthProvider>
       </LanguageProvider>
