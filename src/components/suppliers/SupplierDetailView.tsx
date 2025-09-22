@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { useSupplier, Supplier } from '../../contexts/SupplierContext';
-import AddPurchaseOrderModal from './AddPurchaseOrderModal';
-import EditPurchaseOrderModal from './EditPurchaseOrderModal';
-import AddSupplierPaymentModal from './AddSupplierPaymentModal';
-import EditSupplierPaymentModal from './EditSupplierPaymentModal';
+//import AddPurchaseOrderModal from './AddPurchaseOrderModal';
+//import EditPurchaseOrderModal from './EditPurchaseOrderModal';
+//import AddSupplierPaymentModal from './AddSupplierPaymentModal';
+//import EditSupplierPaymentModal from './EditSupplierPaymentModal';
 import { 
   Building2, 
   Phone, 
