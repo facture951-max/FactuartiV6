@@ -35,7 +35,7 @@ import AdminDashboard from './components/admin/AdminDashboard';
 // import StockManagement from './components/stock/StockManagement';
 // import HRManagement from './components/hr/HRManagement';
 // import SupplierManagement from './components/suppliers/SupplierManagement';
-// import SuppliersSection from './components/suppliers/SuppliersSection';
+ import SuppliersSection from './components/suppliers/SuppliersSection';
 import AccountManagement from './components/account/AccountManagement';
 import ProjectManagement from './components/projects/ProjectManagement';
 import OrdersList from './components/orders/OrdersList';
@@ -171,8 +171,8 @@ function AppContent() {
             <Route path="/quotes/create" element={<CreateQuote />} />
             <Route path="/clients" element={<ClientsList />} />
             <Route path="/products" element={<ProductsList />} />
-          {/*    <Route path="/suppliers" element={<SuppliersSection />} />
-           <Route path="/stock-management" element={<StockManagement />} />
+            <Route path="/suppliers" element={<SuppliersSection />} />
+           {/*  <Route path="/stock-management" element={<StockManagement />} />
             <Route path="/supplier-management" element={<SupplierManagement />} />*/}
             {/* <Route path="/hr-management" element={<HRManagement />} /> */}
             <Route path="/project-management" element={<ProjectManagement />} />
