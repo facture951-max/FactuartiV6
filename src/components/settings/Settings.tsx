@@ -12,6 +12,14 @@ import EmailVerificationModal from '../auth/EmailVerificationModal';
 export default function Settings() {
   const { user, firebaseUser, updateCompanySettings, sendEmailVerification } = useAuth();
   const { t } = useLanguage();
+  const [passwordForm, setPasswordForm] = useState({
+    currentPassword: '',
+    newPassword: '',
+    confirmNewPassword: ''
+  });
+  const [passwordError, setPasswordError] = useState('');
+  const [showPasswordModal, setShowPasswordModal] = useState(false);
+  const [isChangingPassword, setIsChangingPassword] = useState(false);
   const [companyData, setCompanyData] = useState({
     name: '',
     ice: '',
