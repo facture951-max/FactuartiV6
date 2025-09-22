@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useSupplier } from '../../contexts/SupplierContext';
 import { useLicense } from '../../contexts/LicenseContext';
-import SupplierDetailView from './SupplierDetailView';
+//import SupplierDetailView from './SupplierDetailView';
 import AddSupplierModal from './AddSupplierModal';
 import EditSupplierModal from './EditSupplierModal';
 import SupplierOrderActionsGuide from './SupplierOrderActionsGuide';
