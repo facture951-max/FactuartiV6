@@ -900,6 +900,154 @@ export default function Settings() {
         isOpen={showEmailVerificationModal}
         onClose={() => setShowEmailVerificationModal(false)}
       />
+
+      {/* Modal de changement de mot de passe */}
+      {showPasswordModal && (
+        <div className="fixed inset-0 z-50 overflow-y-auto bg-black bg-opacity-50 backdrop-blur-sm">
+          <div className="flex items-center justify-center min-h-screen px-4 pt-4 pb-20">
+            <div className="inline-block w-full max-w-md my-8 overflow-hidden text-left align-middle transition-all transform bg-white dark:bg-gray-800 shadow-2xl rounded-2xl">
+              {/* Header */}
+              <div className="bg-gradient-to-r from-blue-600 to-indigo-600 px-6 py-4 text-white">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h3 className="text-lg font-semibold">🔐 Changer le mot de passe</h3>
+                    <p className="text-sm opacity-90">Sécurisez votre compte</p>
+                  </div>
+                  <button
+                    onClick={() => {
+                      setShowPasswordModal(false);
+                      setPasswordData({ currentPassword: '', newPassword: '', confirmPassword: '' });
+                      setPasswordError('');
+                      setPasswordSuccess(false);
+                    }}
+                    className="p-2 hover:bg-white/20 rounded-lg transition-colors"
+                  >
+                    <X className="w-5 h-5" />
+                  </button>
+                </div>
+              </div>
+
+              {/* Contenu */}
+              <div className="p-6">
+                {passwordSuccess ? (
+                  <div className="text-center">
+                    <div className="w-16 h-16 bg-gradient-to-br from-green-400 to-emerald-500 rounded-full flex items-center justify-center mx-auto mb-4 animate-bounce">
+                      <CheckCircle className="w-8 h-8 text-white" />
+                    </div>
+                    <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-2">
+                      ✅ Mot de passe modifié !
+                    </h3>
+                    <p className="text-gray-600 dark:text-gray-300">
+                      Votre mot de passe a été mis à jour avec succès.
+                    </p>
+                  </div>
+                ) : (
+                  <div className="space-y-4">
+                    <div className="text-center mb-6">
+                      <div className="w-16 h-16 bg-gradient-to-br from-blue-100 to-indigo-100 dark:from-blue-900/30 dark:to-indigo-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <Shield className="w-8 h-8 text-blue-600" />
+                      </div>
+                      <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-2">
+                        Modifier votre mot de passe
+                      </h3>
+                      <p className="text-gray-600 dark:text-gray-300">
+                        Saisissez votre mot de passe actuel et choisissez un nouveau mot de passe sécurisé.
+                      </p>
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                        Mot de passe actuel *
+                      </label>
+                      <input
+                        type="password"
+                        value={passwordData.currentPassword}
+                        onChange={(e) => setPasswordData({...passwordData, currentPassword: e.target.value})}
+                        className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+                        placeholder="Votre mot de passe actuel"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                        Nouveau mot de passe *
+                      </label>
+                      <input
+                        type="password"
+                        value={passwordData.newPassword}
+                        onChange={(e) => setPasswordData({...passwordData, newPassword: e.target.value})}
+                        className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+                        placeholder="Nouveau mot de passe (min 6 caractères)"
+                        minLength={6}
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                        Confirmer le nouveau mot de passe *
+                      </label>
+                      <input
+                        type="password"
+                        value={passwordData.confirmPassword}
+                        onChange={(e) => setPasswordData({...passwordData, confirmPassword: e.target.value})}
+                        className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+                        placeholder="Confirmer le nouveau mot de passe"
+                      />
+                    </div>
+
+                    {passwordError && (
+                      <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-700 text-red-700 dark:text-red-300 px-4 py-3 rounded-lg flex items-center space-x-2">
+                        <AlertTriangle className="w-5 h-5 flex-shrink-0" />
+                        <span>{passwordError}</span>
+                      </div>
+                    )}
+
+                    <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-700 rounded-lg p-4">
+                      <h4 className="font-medium text-blue-900 dark:text-blue-100 mb-2">🔒 Conseils de sécurité :</h4>
+                      <ul className="text-sm text-blue-800 dark:text-blue-200 space-y-1">
+                        <li>• Utilisez au moins 6 caractères</li>
+                        <li>• Mélangez lettres, chiffres et symboles</li>
+                        <li>• Évitez les mots de passe trop simples</li>
+                        <li>• Ne partagez jamais votre mot de passe</li>
+                      </ul>
+                    </div>
+
+                    <div className="flex space-x-3 pt-4">
+                      <button
+                        onClick={() => {
+                          setShowPasswordModal(false);
+                          setPasswordData({ currentPassword: '', newPassword: '', confirmPassword: '' });
+                          setPasswordError('');
+                        }}
+                        className="flex-1 px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors font-medium text-gray-700 dark:text-gray-300"
+                      >
+                        Annuler
+                      </button>
+                      <button
+                        onClick={handlePasswordChange}
+                        disabled={isChangingPassword || !passwordData.currentPassword || !passwordData.newPassword || !passwordData.confirmPassword}
+                        className="flex-1 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white px-4 py-3 rounded-lg font-semibold transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                      >
+                        {isChangingPassword ? (
+                          <span className="flex items-center justify-center space-x-2">
+                            <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                            <span>Modification...</span>
+                          </span>
+                        ) : (
+                          <span className="flex items-center justify-center space-x-2">
+                            <Shield className="w-4 h-4" />
+                            <span>Changer le mot de passe</span>
+                          </span>
+                        )}
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
