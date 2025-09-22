@@ -126,18 +126,23 @@ export function OrderProvider({ children }: { children: ReactNode }) {
       // Déterminer si on doit débiter le stock
       const shouldDebitStock = initialStatus === 'en_cours_livraison' || initialStatus === 'livre';
       
-      const docRef = await addDoc(collection(db, 'orders'), {
+      // Créer l'objet commande complet
+      const completeOrderData = {
         ...orderData,
         number: orderNumber,
         status: initialStatus,
         stockDebited: shouldDebitStock,
         entrepriseId: user.isAdmin ? user.id : user.entrepriseId,
         createdAt: new Date().toISOString()
+      };
+      
+      const docRef = await addDoc(collection(db, 'orders'), {
+        ...completeOrderData
       });
 
       // Débiter le stock si nécessaire
       if (shouldDebitStock) {
-        await debitStock(orderData.items, orderNumber);
+        await debitStock(orderData.items, docRef.id, { ...completeOrderData, id: docRef.id });
       }
     } catch (error) {
       console.error('Erreur lors de l\'ajout de la commande:', error);
@@ -162,7 +167,7 @@ export function OrderProvider({ children }: { children: ReactNode }) {
       const order = orders.find(o => o.id === id);
       if (order && order.stockDebited) {
         // Ré-injecter le stock avant suppression
-        await returnStock(order.items, order.number);
+        await returnStock(order.items, order.id, order);
       }
       
       await deleteDoc(doc(db, 'orders', id));
@@ -183,7 +188,7 @@ export function OrderProvider({ children }: { children: ReactNode }) {
       // Gestion du stock selon les changements de statut
       if (isNewStatusActive && !order.stockDebited) {
         // Passer à un statut actif sans avoir débité → débiter
-        await debitStock(order.items, order.number);
+        await debitStock(order.items, order.id, order);
         await updateDoc(doc(db, 'orders', id), {
           status: newStatus,
           stockDebited: true,
@@ -191,7 +196,7 @@ export function OrderProvider({ children }: { children: ReactNode }) {
         });
       } else if (!isNewStatusActive && order.stockDebited) {
         // Passer à annulé avec stock débité → ré-injecter
-        await returnStock(order.items, order.number);
+        await returnStock(order.items, order.id, order);
         await updateDoc(doc(db, 'orders', id), {
           status: newStatus,
           stockDebited: false,
@@ -211,11 +216,8 @@ export function OrderProvider({ children }: { children: ReactNode }) {
   };
 
   // Fonctions utilitaires pour la gestion du stock
-  const debitStock = async (items: OrderItem[], orderNumber: string) => {
+  const debitStock = async (items: OrderItem[], orderId: string, orderData: Order) => {
     if (!user) return;
-
-    const order = orders.find(o => o.number === orderNumber);
-    if (!order) return;
 
     for (const item of items) {
       try {
@@ -236,14 +238,14 @@ export function OrderProvider({ children }: { children: ReactNode }) {
           previousStock: previousStock,
           newStock: newStock,
           reason: 'Commande',
-          reference: orderNumber,
-          orderId: order.id,
+          reference: orderData.number,
+          orderId: orderId,
           orderDetails: {
-            orderNumber: order.number,
-            clientName: order.clientType === 'personne_physique' ? order.clientName || 'Client particulier' : order.client?.name || 'Client société',
-            orderTotal: order.totalTTC,
-            orderDate: order.orderDate,
-            clientType: order.clientType
+            orderNumber: orderData.number,
+            clientName: orderData.clientType === 'personne_physique' ? orderData.clientName || 'Client particulier' : orderData.client?.name || 'Client société',
+            orderTotal: orderData.totalTTC,
+            orderDate: orderData.orderDate,
+            clientType: orderData.clientType
           },
           userId: user.id,
           userName: user.name,
@@ -264,11 +266,8 @@ export function OrderProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  const returnStock = async (items: OrderItem[], orderNumber: string) => {
+  const returnStock = async (items: OrderItem[], orderId: string, orderData: Order) => {
     if (!user) return;
-
-    const order = orders.find(o => o.number === orderNumber);
-    if (!order) return;
 
     for (const item of items) {
       try {
@@ -289,14 +288,14 @@ export function OrderProvider({ children }: { children: ReactNode }) {
           previousStock: previousStock,
           newStock: newStock,
           reason: 'Annulation commande',
-          reference: orderNumber,
-          orderId: order.id,
+          reference: orderData.number,
+          orderId: orderId,
           orderDetails: {
-            orderNumber: order.number,
-            clientName: order.clientType === 'personne_physique' ? order.clientName || 'Client particulier' : order.client?.name || 'Client société',
-            orderTotal: order.totalTTC,
-            orderDate: order.orderDate,
-            clientType: order.clientType
+            orderNumber: orderData.number,
+            clientName: orderData.clientType === 'personne_physique' ? orderData.clientName || 'Client particulier' : orderData.client?.name || 'Client société',
+            orderTotal: orderData.totalTTC,
+            orderDate: orderData.orderDate,
+            clientType: orderData.clientType
           },
           userId: user.id,
           userName: user.name,
