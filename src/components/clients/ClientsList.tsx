@@ -182,8 +182,9 @@ export default function ClientsList() {
           client={clients.find((c) => c.id === editingClient)!}
         />
       )}
-    </>
+
       <ClientActionsGuide />
+        
    </div>
   );
 }
