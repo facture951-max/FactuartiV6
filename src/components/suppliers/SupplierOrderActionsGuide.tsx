@@ -371,32 +371,38 @@ export default function SupplierOrderActionsGuide() {
                   >
                     <h4 className="font-bold text-indigo-900 dark:text-indigo-100 mb-4 flex items-center space-x-2">
                       <FileText className="w-5 h-5" />
-                      <span>📋 Types de Commandes Supportées</span>
+                      <span>👁️ Vue Détaillée Fournisseur</span>
                     </h4>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <div className="bg-white dark:bg-gray-800 rounded-lg p-4 border border-indigo-200 dark:border-indigo-600">
-                        <div className="flex items-center space-x-3 mb-3">
-                          <Package className="w-6 h-6 text-blue-600" />
-                          <h5 className="font-semibold text-gray-900 dark:text-gray-100">Commandes de Marchandises</h5>
-                        </div>
-                        <ul className="text-sm text-gray-700 dark:text-gray-300 space-y-1">
-                          <li>• Produits pour revente</li>
-                          <li>• Matières premières</li>
-                          <li>• Fournitures et consommables</li>
-                          <li>• Gestion des quantités et prix</li>
-                        </ul>
+                    <div className="bg-white dark:bg-gray-800 rounded-lg p-6 border border-indigo-200 dark:border-indigo-600">
+                      <div className="text-center mb-4">
+                        <Eye className="w-12 h-12 text-indigo-600 mx-auto mb-3" />
+                        <h5 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Fiche Fournisseur Complète</h5>
                       </div>
-                      <div className="bg-white dark:bg-gray-800 rounded-lg p-4 border border-indigo-200 dark:border-indigo-600">
-                        <div className="flex items-center space-x-3 mb-3">
-                          <Building2 className="w-6 h-6 text-green-600" />
-                          <h5 className="font-semibold text-gray-900 dark:text-gray-100">Commandes de Services</h5>
+                      <p className="text-sm text-gray-700 dark:text-gray-300 mb-4 text-center">
+                        En cliquant sur l'icône 👁️ "Voir détails" de chaque fournisseur, vous accédez à une vue complète avec :
+                      </p>
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div className="text-center p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-700">
+                          <FileText className="w-8 h-8 text-blue-600 mx-auto mb-2" />
+                          <h6 className="font-medium text-blue-900 dark:text-blue-100">Commandes</h6>
+                          <p className="text-xs text-blue-800 dark:text-blue-200">Historique complet des commandes passées</p>
                         </div>
-                        <ul className="text-sm text-gray-700 dark:text-gray-300 space-y-1">
-                          <li>• Prestations de service</li>
-                          <li>• Maintenance et réparations</li>
-                          <li>• Consulting et formation</li>
-                          <li>• Facturation au temps ou forfait</li>
-                        </ul>
+                        <div className="text-center p-4 bg-green-50 dark:bg-green-900/20 rounded-lg border border-green-200 dark:border-green-700">
+                          <CreditCard className="w-8 h-8 text-green-600 mx-auto mb-2" />
+                          <h6 className="font-medium text-green-900 dark:text-green-100">Paiements</h6>
+                          <p className="text-xs text-green-800 dark:text-green-200">Tous les paiements effectués</p>
+                        </div>
+                        <div className="text-center p-4 bg-purple-50 dark:bg-purple-900/20 rounded-lg border border-purple-200 dark:border-purple-700">
+                          <DollarSign className="w-8 h-8 text-purple-600 mx-auto mb-2" />
+                          <h6 className="font-medium text-purple-900 dark:text-purple-100">Balance</h6>
+                          <p className="text-xs text-purple-800 dark:text-purple-200">Calcul automatique : Commandes - Paiements</p>
+                        </div>
+                      </div>
+                      <div className="mt-4 p-3 bg-indigo-50 dark:bg-indigo-900/20 rounded-lg border border-indigo-200 dark:border-indigo-700">
+                        <p className="text-sm text-indigo-800 dark:text-indigo-200 text-center">
+                          <strong>💡 Astuce :</strong> La balance se calcule automatiquement : 
+                          <span className="font-mono">Total Commandes - Total Paiements = Solde à payer</span>
+                        </p>
                       </div>
                     </div>
                   </motion.div>
