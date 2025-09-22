@@ -231,10 +231,10 @@ export default function StockHistoryModal({ isOpen, onClose, product }: StockHis
             </div>
             <button
               onClick={exportStockReport}
-              className="inline-flex items-center space-x-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors"
+              className="inline-flex items-center space-x-2 bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg transition-colors"
             >
               <Download className="w-4 h-4" />
-              <span>Export CSV</span>
+              <span>Export PDF</span>
             </button>
           </div>
 
