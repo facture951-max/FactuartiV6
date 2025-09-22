@@ -26,27 +26,8 @@ export default function ProductsList() {
   // Calculer le stock restant selon la formule : Stock Initial + Rectifications - Ventes
   const calculateCurrentStock = (productId: string) => {
     const product = products.find(p => p.id === productId);
-    if (!product) return 0;
-
-    // Stock initial
-    const initialStock = product.initialStock || 0;
-
-    // Total des rectifications (ajustements)
-    const adjustments = stockMovements
-      .filter(m => m.productId === productId && m.type === 'adjustment')
-      .reduce((sum, m) => sum + m.quantity, 0);
-
-    // Total des commandes livrées (uniquement les commandes, pas les factures)
-    const deliveredOrders = orders.reduce((sum, order) => {
-      if (order.status === 'livre') {
-        return sum + order.items
-          .filter(item => item.productName === product.name)
-          .reduce((itemSum, item) => itemSum + item.quantity, 0);
-      }
-      return sum;
-    }, 0);
-
-    return initialStock + adjustments - deliveredOrders;
+    // Le stock actuel est maintenant géré directement dans le champ product.stock
+    return product ? product.stock : 0;
   };
 
   // Calculer les statistiques des commandes pour un produit

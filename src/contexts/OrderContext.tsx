@@ -13,7 +13,7 @@ import {
 } from 'firebase/firestore';
 import { db } from '../config/firebase';
 import { useAuth } from './AuthContext';
-import { Client, Product } from './DataContext';
+import { Client, Product, useData } from './DataContext';
 
 export interface OrderItem {
   id: string;
@@ -60,6 +60,7 @@ const OrderContext = createContext<OrderContextType | undefined>(undefined);
 
 export function OrderProvider({ children }: { children: ReactNode }) {
   const { user, isAuthenticated } = useAuth();
+  const { products, updateProduct } = useData();
   const [orders, setOrders] = useState<Order[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -218,14 +219,21 @@ export function OrderProvider({ children }: { children: ReactNode }) {
 
     for (const item of items) {
       try {
+        // Récupérer le produit actuel pour avoir le stock à jour
+        const currentProduct = products.find(p => p.id === item.productId);
+        if (!currentProduct) continue;
+        
+        const previousStock = currentProduct.stock;
+        const newStock = Math.max(0, previousStock - item.quantity);
+        
         // Ajouter un mouvement de stock
         await addDoc(collection(db, 'stockMovements'), {
           productId: item.productId,
           productName: item.productName,
           type: 'order_out',
           quantity: -item.quantity, // Négatif pour sortie
-          previousStock: 0, // Sera calculé automatiquement
-          newStock: 0, // Sera calculé automatiquement
+          previousStock: previousStock,
+          newStock: newStock,
           reason: 'Commande',
           reference: orderNumber,
           orderId: order.id,
@@ -243,6 +251,9 @@ export function OrderProvider({ children }: { children: ReactNode }) {
           entrepriseId: user.isAdmin ? user.id : user.entrepriseId,
           createdAt: new Date().toISOString()
         });
+        
+        // Mettre à jour le stock du produit
+        await updateProduct(item.productId, { stock: newStock });
       } catch (error) {
         console.error('Erreur lors du débit de stock:', error);
       }
@@ -257,14 +268,21 @@ export function OrderProvider({ children }: { children: ReactNode }) {
 
     for (const item of items) {
       try {
+        // Récupérer le produit actuel pour avoir le stock à jour
+        const currentProduct = products.find(p => p.id === item.productId);
+        if (!currentProduct) continue;
+        
+        const previousStock = currentProduct.stock;
+        const newStock = previousStock + item.quantity;
+        
         // Ajouter un mouvement de stock de retour
         await addDoc(collection(db, 'stockMovements'), {
           productId: item.productId,
           productName: item.productName,
           type: 'order_cancel_return',
           quantity: item.quantity, // Positif pour retour
-          previousStock: 0, // Sera calculé automatiquement
-          newStock: 0, // Sera calculé automatiquement
+          previousStock: previousStock,
+          newStock: newStock,
           reason: 'Annulation commande',
           reference: orderNumber,
           orderId: order.id,
@@ -282,6 +300,9 @@ export function OrderProvider({ children }: { children: ReactNode }) {
           entrepriseId: user.isAdmin ? user.id : user.entrepriseId,
           createdAt: new Date().toISOString()
         });
+        
+        // Mettre à jour le stock du produit
+        await updateProduct(item.productId, { stock: newStock });
       } catch (error) {
         console.error('Erreur lors du retour de stock:', error);
       }

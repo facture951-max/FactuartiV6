@@ -56,10 +56,8 @@ export default function StockHistoryModal({ isOpen, onClose, product }: StockHis
       });
     }
     
-    // 2. Mouvements de stock (rectifications et commandes)
-    const movements = stockMovements.filter(m => 
-      m.productId === product.id && m.type === 'adjustment'
-    );
+    // 2. Tous les mouvements de stock (rectifications, commandes, etc.)
+    const movements = stockMovements.filter(m => m.productId === product.id);
     
     movements.forEach(movement => {
       history.push({
@@ -77,27 +75,6 @@ export default function StockHistoryModal({ isOpen, onClose, product }: StockHis
       });
     });
 
-    // 3. Mouvements liés aux commandes (depuis stockMovements)
-    const orderMovements = stockMovements.filter(m => 
-      m.productId === product.id && (m.type === 'order_out' || m.type === 'order_cancel_return')
-    );
-    
-    orderMovements.forEach(movement => {
-      history.push({
-        id: movement.id,
-        type: movement.type,
-        date: movement.adjustmentDateTime || movement.date,
-        quantity: movement.quantity,
-        previousStock: movement.previousStock,
-        newStock: movement.newStock,
-        reason: movement.reason || (movement.type === 'order_out' ? 'Commande livrée' : 'Commande annulée'),
-        userName: movement.userName,
-        reference: movement.reference || '',
-        orderId: movement.orderId || null,
-        orderDetails: movement.orderDetails || null
-      });
-    });
-    
     // Trier par date
     return history.sort((a, b) => {
       const dateA = new Date(a.date);
@@ -109,19 +86,8 @@ export default function StockHistoryModal({ isOpen, onClose, product }: StockHis
   const history = generateProductHistory();
   
   const calculateCurrentStock = () => {
-    const initialStock = product.initialStock || 0;
-    const adjustments = stockMovements
-      .filter(m => m.productId === product.id && m.type === 'adjustment')
-      .reduce((sum, m) => sum + m.quantity, 0);
-    const deliveredOrders = orders.reduce((sum, order) => {
-      if (order.status === 'livre') {
-        return sum + order.items
-          .filter(item => item.productName === product.name)
-          .reduce((itemSum, item) => itemSum + item.quantity, 0);
-      }
-      return sum;
-    }, 0);
-    return initialStock + adjustments - deliveredOrders;
+    // Le stock actuel est maintenant géré directement dans le champ product.stock
+    return product.stock;
   };
 
   // Calculer le résumé
