@@ -28,7 +28,7 @@ export interface UserPermissions {
   suppliers: boolean;
   stockManagement: boolean;
   supplierManagement: boolean;
-  hrManagement: boolean;
+ // hrManagement: boolean;
   reports: boolean;
   settings: boolean;
   projectManagement: boolean;
