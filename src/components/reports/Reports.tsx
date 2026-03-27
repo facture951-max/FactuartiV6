@@ -128,7 +128,7 @@ const Reports: React.FC = () => {
 
     const paidAmount = paid.reduce((s: number, inv: any) => s + inv.totalTTC, 0);
     const unpaidAmount = unpaid.reduce((s: number, inv: any) => s + inv.totalTTC, 0);
-    const collectedAmount = collected.reduce((s: number, inv: any) => s + inv.totalTCC ?? inv.totalTTC, 0) - 0; // tolérance typo totalTCC
+    const collectedAmount = collected.reduce((s: number, inv: any) => s + (inv.totalTCC ?? inv.totalTTC), 0);
     const totalAmount = paidAmount + unpaidAmount + collectedAmount;
 
     const base = [

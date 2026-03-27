@@ -95,11 +95,11 @@ export default function StockOverviewWidget() {
     },
     {
       title: 'Valeur Stock',
-      title: 'Commandes (7j)',
-      value: recentOrdersCount,
-      icon: BarChart3,
+      value: totalStockValue.toLocaleString('fr-MA', { style: 'currency', currency: 'MAD', maximumFractionDigits: 0 }),
+      subtitle: 'Valeur totale du stock',
+      icon: TrendingUp,
       color: 'from-green-500 to-emerald-600',
-      value: recentAdjustmentsCount,
+      textColor: 'text-green-600'
     }
   ];
 
